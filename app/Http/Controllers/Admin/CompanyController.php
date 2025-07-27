@@ -6,14 +6,15 @@ use App\Http\Controllers\Controller;
 use App\Models\Company;
 use Illuminate\Http\Request;
 
-class CompanyController extends Controller{
-
-
+class CompanyController extends Controller
+{
+    /**
+     * Display a listing of the resource.
+     */
     public function index()
     {
-
         $company = Company::first();
-  return view("admin.company.index", compact('company'));
+        return view("admin.company.index", compact('company'));
     }
 
     /**
@@ -21,7 +22,6 @@ class CompanyController extends Controller{
      */
     public function create()
     {
-        //
         $company = Company::first();
         if (!$company) {
             return view("admin.company.create");
@@ -34,7 +34,6 @@ class CompanyController extends Controller{
      */
     public function store(Request $request)
     {
-        //
         // return $request;
         $company = new Company();
         $company->name = $request->name;
@@ -58,11 +57,18 @@ class CompanyController extends Controller{
     }
 
     /**
+     * Display the specified resource.
+     */
+    public function show(string $id)
+    {
+        //
+    }
 
+    /**
+     * Show the form for editing the specified resource.
      */
     public function edit(string $id)
     {
-        //
         $company = Company::find($id);
         return view('admin.company.edit',  compact('company'));
     }
@@ -72,7 +78,6 @@ class CompanyController extends Controller{
      */
     public function update(Request $request, string $id)
     {
-        //
         $company = Company::find($id);
         $company->name = $request->name;
         $company->email = $request->email;
@@ -84,9 +89,9 @@ class CompanyController extends Controller{
         $company->meta_description = $request->description;
         $file = $request->logo;
         if ($file) {
-            // if ($company->logo) {
-            //     unlink($company->logo);
-            // }
+            if ($company->logo) {
+                unlink($company->logo);
+            }
             $newName = uniqid() . "." . $file->getClientOriginalExtension();
             $file->move('images/', $newName);
             $company->logo = "images/$newName";

@@ -75,14 +75,10 @@ class AdvertiseController extends Controller
     public function update(Request $request, string $id)
     {
 
-         $request->validate([
-            "company_name" => "required",
-        ]);
         $advertise = Advertise::find($id);
         $advertise->company_name = $request->company_name;
         $advertise->contact = $request->contact;
         $advertise->expire_date = $request->expire_date;
-        $advertise->schedule_date = $request->schedule_date;
         $advertise->redirect_url = $request->redirect_url;
         $file = $request->image;
         if ($file) {
@@ -90,7 +86,6 @@ class AdvertiseController extends Controller
             $file->move('advertises/', $newName);
             $advertise->image = "advertises/$newName";
         }
-        $advertise->save();
         toast("Advertise Updated Successfully", 'success');
 
         return redirect()->back();
